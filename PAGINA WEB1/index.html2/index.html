@@ -1,0 +1,296 @@
+Aquí tienes el contenido para `index.html` (corregí el typo `htlm`):
+
+````html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Guía visual para entender cómo funciona Amazon S3 en AWS.">
+  <title>Amazon S3 — Guía de almacenamiento</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b1220;
+      --panel: #121d2e;
+      --panel-light: #19273a;
+      --text: #eef4fb;
+      --muted: #a9b8ca;
+      --accent: #ffb84d;
+      --green: #64d9a2;
+      --border: #26364b;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: var(--accent); }
+
+    .container {
+      width: min(1080px, 92%);
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 72px 0 54px;
+      background:
+        radial-gradient(ellipse at 80% 20%, #25415c 0, transparent 42%),
+        linear-gradient(135deg, #101b2c, #0b1220);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .eyebrow {
+      color: var(--green);
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-size: .8rem;
+    }
+
+    h1 {
+      max-width: 760px;
+      margin: 12px 0;
+      font-size: clamp(2.4rem, 6vw, 4.5rem);
+      line-height: 1.08;
+    }
+
+    h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); }
+
+    .intro {
+      max-width: 700px;
+      color: var(--muted);
+      font-size: 1.12rem;
+    }
+
+    .button {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 11px 18px;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #1a1a1a;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    main { padding: 38px 0 70px; }
+
+    section { margin: 48px 0; }
+
+    .section-intro { color: var(--muted); max-width: 720px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 22px;
+    }
+
+    .card, .diagram, .notice {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .card h3 { margin-top: 0; color: var(--accent); }
+    .card p, .card li { color: var(--muted); }
+
+    .diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      text-align: center;
+    }
+
+    .step {
+      min-width: 145px;
+      padding: 14px;
+      background: var(--panel-light);
+      border-radius: 9px;
+    }
+
+    .arrow { color: var(--accent); font-size: 1.5rem; }
+
+    code {
+      padding: 2px 6px;
+      border-radius: 5px;
+      background: #25354a;
+      color: #ffe0a8;
+    }
+
+    .notice {
+      border-left: 4px solid var(--green);
+      color: var(--muted);
+    }
+
+    footer {
+      padding: 24px 0;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    @media (max-width: 560px) {
+      header { padding-top: 48px; }
+      .arrow { transform: rotate(90deg); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="eyebrow">Servicios de almacenamiento en AWS</div>
+      <h1>¿Cómo funciona Amazon S3?</h1>
+      <p class="intro">
+        Amazon Simple Storage Service (Amazon S3) es un servicio de almacenamiento
+        de objetos. Permite guardar y recuperar archivos desde internet con
+        escalabilidad, controles de acceso y distintas opciones de almacenamiento.
+      </p>
+      <a class="button" href="#conceptos">Explorar los conceptos</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="conceptos">
+      <h2>Las piezas principales</h2>
+      <p class="section-intro">
+        S3 organiza los datos en contenedores y objetos. Cada objeto incluye los
+        datos del archivo, metadatos y una clave que lo identifica dentro de su bucket.
+      </p>
+
+      <div class="grid">
+        <article class="card">
+          <h3>Bucket</h3>
+          <p>
+            Es el contenedor donde se almacenan los objetos. Se crea en una región
+            de AWS y su nombre debe ser único dentro de la partición de AWS.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Objeto</h3>
+          <p>
+            Es el archivo almacenado junto con sus metadatos. Por ejemplo, una
+            imagen, un documento o un archivo de respaldo.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Clave (key)</h3>
+          <p>
+            Es el identificador del objeto dentro del bucket, como
+            <code>imagenes/logo.png</code>. Las carpetas que parecen existir en S3
+            suelen ser parte de esa clave.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>El flujo básico</h2>
+      <div class="diagram" aria-label="Flujo de carga y descarga de archivos">
+        <div class="step">Aplicación o usuario</div>
+        <span class="arrow" aria-hidden="true">→</span>
+        <div class="step">Solicitud autorizada</div>
+        <span class="arrow" aria-hidden="true">→</span>
+        <div class="step">Bucket de S3</div>
+        <span class="arrow" aria-hidden="true">→</span>
+        <div class="step">Objeto almacenado o recuperado</div>
+      </div>
+      <p class="section-intro">
+        Una aplicación puede cargar, consultar o eliminar objetos mediante la
+        consola de AWS, la API, herramientas como AWS CLI o un SDK. AWS verifica
+        los permisos antes de permitir la operación.
+      </p>
+    </section>
+
+    <section>
+      <h2>Almacenamiento según el uso</h2>
+      <p class="section-intro">
+        Las clases de almacenamiento permiten elegir opciones adecuadas para la
+        frecuencia de acceso y el tiempo de conservación. Algunas clases están
+        diseñadas para acceso frecuente; otras, para archivo de largo plazo.
+      </p>
+      <div class="grid">
+        <article class="card">
+          <h3>Acceso frecuente</h3>
+          <p>Útil para contenido que se consulta regularmente, como recursos de una aplicación.</p>
+        </article>
+        <article class="card">
+          <h3>Acceso poco frecuente</h3>
+          <p>Puede ser apropiado para datos que se conservan, pero se consultan ocasionalmente.</p>
+        </article>
+        <article class="card">
+          <h3>Archivo</h3>
+          <p>Orientado a datos de larga conservación que pueden tolerar tiempos de recuperación mayores.</p>
+        </article>
+      </div>
+      <p class="section-intro">
+        Los precios y condiciones dependen de la clase, la región, las solicitudes
+        y la transferencia de datos. Consulta la documentación y la calculadora de
+        precios de AWS antes de elegir.
+      </p>
+    </section>
+
+    <section>
+      <h2>Seguridad y administración</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>Permisos</h3>
+          <p>
+            AWS Identity and Access Management (IAM) y las políticas de bucket
+            ayudan a definir quién puede acceder y qué acciones puede realizar.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Cifrado</h3>
+          <p>
+            S3 ofrece opciones para cifrar los datos. Configura el cifrado y la
+            gestión de claves según los requisitos de tu organización.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Versionado y ciclo de vida</h3>
+          <p>
+            El versionado puede conservar distintas versiones de un objeto. Las
+            reglas de ciclo de vida permiten administrar o mover objetos con el tiempo.
+          </p>
+        </article>
+      </div>
+      <p class="notice">
+        <strong>Buena práctica:</strong> mantén el acceso público bloqueado salvo
+        que tengas un motivo claro para habilitarlo. Concede solo los permisos
+        necesarios y evita guardar credenciales de AWS en el código fuente.
+      </p>
+    </section>
+
+    <section>
+      <h2>Ejemplo práctico</h2>
+      <p class="section-intro">
+        Para publicar imágenes de una aplicación, puedes crear un bucket en la
+        región adecuada, configurar permisos seguros y cargar cada imagen con una
+        clave como <code>productos/camiseta-01.jpg</code>. La aplicación podrá
+        acceder a ella usando el método de autorización que hayas configurado.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      Material introductorio. Revisa la documentación oficial de AWS para conocer
+      las opciones y límites vigentes de Amazon S3.
+    </div>
+  </footer>
+</body>
+</html>
+````
